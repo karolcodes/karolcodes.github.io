@@ -96,21 +96,22 @@ function holdsMark(event){
 function publish(){
 
    FB.getLoginStatus(function(response) { 
-     if(!(response.status === 'connected')){
-       console.log(response);       
-console.log("DUPA");
-     } else {
-console.log("KUPA");
-       uID = response.authResponse.userID;
-       accessToken = response.authResponse.accessToken;
-       FB.api('/me', {fields: 'last_name'}, {  access_token : accessToken } ,function(response) {
-         console.log(response);
-       });
-     }
-  });
-//  console.log(FB.getAuthResponse());
+            if(!(response.status === 'connected')){
+                location.href = './fb-login.html';
+                } else {
+                    uID = response.authResponse.userID;
+                    accessToken = response.authResponse.accessToken;
+            FB.api('/me', {fields: 'last_name'}, {  access_token : accessToken } ,function(response) {
+                console.log(response);
+            });
 
-        
+                }
+
+            });
+
+            console.log(FB.getAuthResponse());
+
+        }
 
 
 //FB.api(
