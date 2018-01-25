@@ -668,26 +668,27 @@ console.log("KUPA");
        });
      }
   });
-}
-//  console.log(FB.getAuthResponse());
+
+  console.log(FB.getAuthResponse());
 
         
 
 
-//FB.api(
-//    "/169418077166205/photos",
-//    "POST",
-//    {
-//        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
-//    },
-//    function (response) {
-//document.getElementById("y").innerHTML = response;
-//      if (response && !response.error) {
-        /* handle the result */
-//      }
-//    }
-//);
+FB.api(
+    "/169418077166205/photos",
+    "POST",
+    {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
+    },
+    function (response) {
+      console.log(response);
 
+      if (response && !response.error) {
+        /* handle the result */
+      }
+    }
+);
+}
 //-->
 </script>
 
