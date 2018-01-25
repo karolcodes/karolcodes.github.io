@@ -655,27 +655,27 @@ function holdsMark(img, ctx, canvas) {
 
 function publish(){
 
-   FB.getLoginStatus(function(response) { 
-     if(!(response.status === 'connected')){
-       console.log(response);       
-console.log("DUPA");
-     } else {
-console.log("KUPA");
-       uID = response.authResponse.userID;
-       accessToken = response.authResponse.accessToken;
-       FB.api('/me', {fields: 'last_name'}, {  access_token : accessToken } ,function(response) {
-         console.log(response);
-       });
-     }
+  FB.getLoginStatus(function(response){
+   if (response.status == 'connected') {
+     accessToken = response.authResponse.accessToken;
+     doSomething();
+   }
+   else {
+     FB.login(function(response){
+       if (response.status == 'connected') {
+         accessToken = response.authResponse.accessToken;
+         doSomething();
+       }
+       else {
+         alert("Bye.");
+       }
+     }, {scope:'publish_stream,user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags'});
+   }
   });
-
-  console.log(FB.getAuthResponse());
-
-        
 
 
 FB.api(
-    "/169418077166205/photos",
+    "/me/albums",
     "POST",
     {
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
@@ -696,10 +696,10 @@ FB.api(
   window.fbAsyncInit = function() {
     FB.init({
       appId            : '143000969707112',
-      autoLogAppEvents : true,
-      status: true,
-      cookie: true,
-      xfbml            : true,
+    status: true,
+    cookie: true,
+    oauth: true,
+    xfbml: true,
       version          : 'v2.11'
     });
   };
