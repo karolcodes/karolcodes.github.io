@@ -658,7 +658,21 @@ function publish(){
   FB.getLoginStatus(function(response){
    if (response.status == 'connected') {
      accessToken = response.authResponse.accessToken;
-     doSomething();
+FB.api(
+    "/169418077166205/photos",
+    "POST",
+    {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
+    },
+    function (response) {
+      console.log(response);
+
+      if (response && !response.error) {
+        /* handle the result */
+      }
+    }
+);
+
    }
    else {
      FB.login(function(response){
@@ -674,20 +688,6 @@ function publish(){
   });
 
 
-FB.api(
-    "/me/albums",
-    "POST",
-    {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
-    },
-    function (response) {
-      console.log(response);
-
-      if (response && !response.error) {
-        /* handle the result */
-      }
-    }
-);
 }
 //-->
 </script>
