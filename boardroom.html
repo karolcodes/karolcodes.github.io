@@ -571,15 +571,15 @@ var holds = [
 
 var state = [];
 
-// 0 - starting holds
-// 1 - normal holds
-// 2 - top
+// 'A' - starting holds
+// 'B' - normal holds
+// 'C' - top
 
-var holdType = 1;
+var holdType = 'B';
 
-function startHolds() { holdType = 0; }
-function mainHolds() { holdType = 1; }
-function topHold() { holdType = 2; }
+function startHolds() { holdType = 'A'; }
+function mainHolds() { holdType = 'B'; }
+function topHold() { holdType = 'C'; }
 
 function drawInitial(img) {
   var canvas = document.querySelector("canvas")
@@ -595,11 +595,11 @@ function drawInitial(img) {
 function color(ht, ctx) {
   ctx.closePath();
   ctx.beginPath();
-  if(ht==0) {
+  if(ht=='A') {
     ctx.strokeStyle="#ff0000";
-  } else if(ht==1){
+  } else if(ht=='B'){
     ctx.strokeStyle="#0000ff";
-  } else if(ht==2){
+  } else if(ht=='C'){
     ctx.strokeStyle="#ffff00";
   }
 }
@@ -653,132 +653,79 @@ function holdsMark(img, ctx, canvas) {
     }
 }
 
-function publish(){
-
-  FB.getLoginStatus(function(response){
-   if (response.status == 'connected') {
-     accessToken = response.authResponse.accessToken;
-FB.api(
-    "/169122013862478/photos",
-    "POST",
-    {
-        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/PM5544_with_non-PAL_signals.png/384px-PM5544_with_non-PAL_signals.png"
-    },
-    function (response) {
-      console.log(response);
-
-      if (response && !response.error) {
-        /* handle the result */
-      }
-    }
-);
-
-   }
-   else {
-     FB.login(function(response){
-       if (response.status == 'connected') {
-         accessToken = response.authResponse.accessToken;
-         doSomething();
-       }
-       else {
-         alert("Bye.");
-       }
-     }, {scope:'publish_stream,user_photos,friends_photos,user_photo_video_tags,friends_photo_video_tags'});
-   }
-  });
-
-
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
 }
+
+function fillStateWithGet() {
+  var params = findGetParameter("problem");
+  if(params) {
+    var splitParams = params.split(',');
+    splitParams.forEach(function(el){
+      var number = el.slice(0, -1);
+      var holdType = el.substr(el.length-1);
+      state.push([parseInt(number), holdType]);
+    });
+  }
+}
+
+function generate() {
+  var parms = "";
+  state.forEach(function(el){
+    parms = parms+el[0]+el[1]+",";}
+  );
+  var parms = parms.slice(0,-1);
+  var ret = "?problem=" + parms;
+  return ret;
+}
+
+function display() {
+  if(findGetParameter("problem"))
+    return "hidden";
+  else
+    return "visible";
+}
+
 //-->
 </script>
 
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId            : '143000969707112',
-    status: true,
-    cookie: true,
-    oauth: true,
-    xfbml: true,
-      version          : 'v2.11'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-
-
-</script>
-
 <button onclick="startHolds()">Start holds</button>
-<button onclick="mainHolds()">Main holds</button>
-<button onclick="topHold()">Top</button>
-<button onclick="publish()">publish</button>
+<button onclick="mainHolds()" >Main holds</button>
+<button onclick="topHold()" style="buttonVisibility()">Top</button>
+<button onclick="javascript:window.location.href=generate()" >Add to the guidebook</button>
 
 <canvas></canvas>
+<html>
+<head>
+<title>Mile End Board Room</title>
+</head>
+<body>
+
+<iframe src="https://www.facebook.com/plugins/share_button.php?href=file%3A%2F%2F%2FUsers%2Fdanae%2Fkarol%2Fkarolcodes.github.io%2Fboardroom.html%3Fproblem%3D82B%2C84B&layout=button_count&size=small&mobile_iframe=true&appId=143000969707112&width=0&height=0" width="0" height="0" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+ 
 <script type="text/javascript">
+
 <!--
   var img = document.createElement("img");
   img.src = "steepboard.png";
 
-  var canvas = drawInitial(img);
+  fillStateWithGet();
+  drawState();
+
+  var canvas = document.querySelector("canvas")
   var ctx = canvas.getContext("2d");
-  canvas.onmousedown = holdsMark(img, ctx, canvas);
-//-->
+  if(display() == "visible") {
+    canvas.onmousedown = holdsMark(img, ctx, canvas);
+  }
+-->
 </script>
-
-
-<html>
-  <head>
-    <title>Example</title>
-  </head>
-  <body>
-    <!-- Load the Facebook JavaScript SDK -->
-    <div id="fb-root"></div>
-    <script src="https://connect.facebook.net/en_US/sdk.js"></script>
-    
-    <script type="text/javascript">
-      
-      // Initialize the Facebook JavaScript SDK
-      FB.init({
-        appId: 'APP_ID',
-        xfbml: true,
-        status: true,
-        cookie: true,
-      });
-      
-      // Check if the current user is logged in and has authorized the app
-      FB.getLoginStatus(checkLoginStatus);
-      
-      // Login in the current user via Facebook and ask for email permission
-      function authUser() {
-        FB.login(checkLoginStatus, {scope:'email'});
-      }
-      
-      // Check the result of the user status and display login button if necessary
-      function checkLoginStatus(response) {
-        if(response && response.status == 'connected') {
-          alert('User is authorized');
-          
-          // Hide the login button
-          document.getElementById('loginButton').style.display = 'none';
-          
-          // Now Personalize the User Experience
-          console.log('Access Token: ' + response.authResponse.accessToken);
-        } else {
-          alert('User is not authorized');
-          
-          // Display the login button
-          document.getElementById('loginButton').style.display = 'block';
-        }
-      }
-    </script>
-    
-    <input id="loginButton" type="button" value="Login!" onclick="authUser();" />
-  </body>
-</html>
+</html></body>
