@@ -709,9 +709,9 @@ function display() {
 
 function reverseDisplay() {
   if(findGetParameter("problem"))
-    return "visible";
+    return "block";
   else
-    return "hidden";
+    return "none";
 }
 
 function getFb() {
@@ -757,6 +757,10 @@ function getFb() {
 <br>
 </div>
 
+<div id="fb">
+<button onclick="mainHolds()" id="dsa">dupa</button>
+</div>
+
 <div id="fb" class="fb-share-button" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u&amp;src=sdkpreparse">Share</a></div>
 
 <canvas></canvas>
@@ -780,7 +784,7 @@ Feet:<br>
   // visibility
   document.getElementById("marks").style.visibility = display();
   document.getElementById("meta").style.visibility = display();
-  document.getElementById("fb").style.visibility = reverseDisplay();
+  document.getElementById("fb").style.display = reverseDisplay();
 
   var img = document.createElement("img");
   img.src = "steepboard.png";
