@@ -596,11 +596,11 @@ function color(ht, ctx) {
   ctx.closePath();
   ctx.beginPath();
   if(ht=='A') {
-    ctx.strokeStyle="#ff0000";
-  } else if(ht=='B'){
-    ctx.strokeStyle="#0000ff";
-  } else if(ht=='C'){
     ctx.strokeStyle="#ffff00";
+  } else if(ht=='B'){
+    ctx.strokeStyle="#13f722";
+  } else if(ht=='C'){
+    ctx.strokeStyle="#16d0ff";
   }
 }
 
@@ -608,14 +608,16 @@ function draw(hold, ht, ctx, img) {
   img.addEventListener("load", function() {
     color(ht, ctx);
     ctx.rect(hold[0][0], hold[0][1], hold[0][2] - hold[0][0], hold[0][3]-hold[0][1]);
+    ctx.lineWidth = 5;
     ctx.stroke();
   })
 }
 
 function drawNoListener(hold, ht, ctx) {
-    color(ht, ctx);
-    ctx.rect(hold[0][0], hold[0][1], hold[0][2] - hold[0][0], hold[0][3]-hold[0][1]);
-    ctx.stroke();
+  color(ht, ctx);
+  ctx.rect(hold[0][0], hold[0][1], hold[0][2] - hold[0][0], hold[0][3]-hold[0][1]);
+  ctx.lineWidth = 5;
+  ctx.stroke();
 }
 
 function drawState() {
@@ -684,8 +686,18 @@ function generate() {
     parms = parms+el[0]+el[1]+",";}
   );
   var parms = parms.slice(0,-1);
-  var ret = "?problem=" + parms;
-  return ret;
+
+  var problem = "?problem=" + parms;
+  var name = "&name=" + document.getElementById("name").value;
+  var grade = "&grade=" + document.getElementById("grade").value;
+  var feet = "&feet=";
+  if(document.getElementById("follow").checked) {
+    feet = feet + document.getElementById("follow").value;
+  } else {
+    feet = feet + document.getElementById("all").value;
+  }
+
+  return problem + name + grade + feet;
 }
 
 function display() {
@@ -698,23 +710,42 @@ function display() {
 //-->
 </script>
 
-<button onclick="startHolds()">Start holds</button>
-<button onclick="mainHolds()" >Main holds</button>
-<button onclick="topHold()" style="buttonVisibility()">Top</button>
-<button onclick="javascript:window.location.href=generate()" >Add to the guidebook</button>
+<div id="marks">
+<button onclick="startHolds()" id="start">Start holds</button>
+<button onclick="mainHolds()" id="main">Main holds</button>
+<button onclick="topHold()" style="buttonVisibility()" id="top">Top</button>
+<br>
+</div>
 
 <canvas></canvas>
+
+<div id="meta">
+<br>
+Name:
+<input type="text" name="name" id="name"><br>
+Grade:
+<input type="text" name="grade" id="grade"><br>
+Feet:<br>
+  <input type="radio" id="follow" name="feet" value="follow" checked>follow<br>
+  <input type="radio" id="all" name="feet" value="all">all in<br>
+<br>
+<button onclick="javascript:window.location.href=generate()" >Add to the guidebook</button>
+</div>
+
 <html>
 <head>
 <title>Mile End Board Room</title>
 </head>
 <body>
 
-<iframe src="https://www.facebook.com/plugins/share_button.php?href=file%3A%2F%2F%2FUsers%2Fdanae%2Fkarol%2Fkarolcodes.github.io%2Fboardroom.html%3Fproblem%3D82B%2C84B&layout=button_count&size=small&mobile_iframe=true&appId=143000969707112&width=0&height=0" width="0" height="0" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
  
 <script type="text/javascript">
 
 <!--
+  // visibility
+  document.getElementById("marks").style.visibility = display();
+  document.getElementById("meta").style.visibility = display();
+
   var img = document.createElement("img");
   img.src = "steepboard.png";
 
@@ -728,4 +759,8 @@ function display() {
   }
 -->
 </script>
+
+
+<iframe src="https://www.facebook.com/plugins/share_button.php?href=file%3A%2F%2F%2FUsers%2Fdanae%2Fkarol%2Fkarolcodes.github.io%2Fboardroom.html%3Fproblem%3D82B%2C84B&layout=button_count&size=small&mobile_iframe=true&appId=143000969707112&width=0&height=0" width="0" height="0" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+
 </html></body>
